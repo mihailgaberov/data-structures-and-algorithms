@@ -1,10 +1,31 @@
-import { Component } from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
+import {Router, NavigationEnd} from '@angular/router';
+import {Stack} from './utils/stack';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss', './theme.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
-  title = 'back-button';
+  constructor(private stack: Stack, private router: Router) {
+    this.router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        this.stack.push(val);
+      }
+    });
+  }
+
+  goBack() {
+    const current = this.stack.pop();
+    const prev = this.stack.peek();
+
+    if (prev) {
+      this.stack.pop();
+      this.router.navigateByUrl(prev.urlAfterRedirects);
+    } else {
+      this.stack.push(current);
+    }
+  }
 }
