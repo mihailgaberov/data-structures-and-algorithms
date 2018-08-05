@@ -1,16 +1,15 @@
 import 'mocha';
 import { expect } from 'chai';
-import LinkedList from './linked-list';
+import CircularLinkedList from './circular-linked-list';
 import TestObj from '../test-obj';
-import util from '../util';
 
-describe('LinkedList', () => {
+describe('CircularLinkedList', () => {
   let list;
   let min;
   let max;
 
   beforeEach(() => {
-    list = new LinkedList(util.defaultEquals);
+    list = new CircularLinkedList();
     min = 1;
     max = 3;
   });
@@ -26,15 +25,22 @@ describe('LinkedList', () => {
     for (let i = min; i <= max && current; i++) {
       expect(current).to.not.be.an('undefined');
       if (current) {
+        // TS strictNullChecks
         expect(current.element).to.not.be.an('undefined');
         expect(current.element).to.equal(i);
         if (i < max) {
           expect(current.next).to.not.be.an('undefined');
           if (current.next) {
+            // TS strictNullChecks
             expect(current.next.element).to.equal(i + 1);
           }
         } else {
-          expect(current.next).to.be.an('undefined');
+          // circular list
+          expect(current.next).to.not.be.an('undefined');
+          expect(current.next).to.equal(list.getHead());
+          if (current.next) {
+            expect(current.next.element).to.equal(min);
+          }
         }
         current = current.next;
       }
@@ -53,6 +59,7 @@ describe('LinkedList', () => {
   });
 
   it('returns element at specific index: invalid position', () => {
+    // list is empty
     expect(list.getElementAt(3)).to.be.an('undefined');
   });
 
@@ -131,10 +138,13 @@ describe('LinkedList', () => {
 
     pushesElements();
 
-    for (let i = min; i <= max; i++) {
+    const minIndex = min;
+    for (let i = minIndex; i <= max; i++) {
       element = list.remove(i);
       expect(element).to.not.be.an('undefined');
       expect(element).to.equal(i);
+      min++;
+      verifyList();
     }
   });
 
@@ -206,10 +216,10 @@ describe('LinkedList', () => {
     expect(current).to.not.be.an('undefined');
     if (current) {
       expect(current.element).to.not.be.an('undefined');
-      expect(current.element).to.equal(1);
+      expect(current.element).to.equal(min);
       expect(current.next).to.not.be.an('undefined');
       if (current.next) {
-        expect(current.next.element).to.equal(3);
+        expect(current.next.element).to.equal(max);
         current = current.next;
       }
     }
@@ -218,8 +228,12 @@ describe('LinkedList', () => {
     expect(current).to.not.be.an('undefined');
     if (current) {
       expect(current.element).to.not.be.an('undefined');
-      expect(current.element).to.equal(3);
-      expect(current.next).to.be.an('undefined');
+      expect(current.element).to.equal(max);
+      expect(current.next).to.not.be.an('undefined');
+      expect(current.next).to.equal(list.getHead());
+      if (current.next) {
+        expect(current.next.element).to.equal(min);
+      }
     }
   });
 
@@ -307,7 +321,7 @@ describe('LinkedList', () => {
   });
 
   it('returns toString primitive types: string', () => {
-    const ds = new LinkedList();
+    const ds = new CircularLinkedList();
     ds.push('el1');
     expect(ds.toString()).to.equal('el1');
 
@@ -316,7 +330,7 @@ describe('LinkedList', () => {
   });
 
   it('returns toString objects', () => {
-    const ds = new LinkedList();
+    const ds = new CircularLinkedList();
     expect(ds.toString()).to.equal('');
 
     ds.push(new TestObj(1, 2));
