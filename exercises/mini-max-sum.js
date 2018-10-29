@@ -17,9 +17,24 @@ Sample Output
 */
 
 function miniMaxSum(arr) {
+  let arrSorted = arr.sort((a, b) => (a-b));
 
+  let minSum = 0
+  let maxSum = 0
 
+  for (let i = 0; i < arrSorted.length; i++) {
+    if (i !== arrSorted.length - 1) {
+      minSum += arrSorted[i]
+    }
+
+    if (i !== 0) {
+      maxSum += arrSorted[i]
+    }
+      
+  }
+  
+  console.log(minSum, maxSum)
 }
 
 miniMaxSum([1, 2, 3, 4, 5]) // 10 14
-miniMaxSum([1, 3, 5, 7, 9]) // 16 24
+miniMaxSum([9, 3, 1, 5, 7]) // 16 24
