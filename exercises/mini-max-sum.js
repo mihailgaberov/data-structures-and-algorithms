@@ -6,10 +6,20 @@
 * For example, arr = [1, 3, 5, 7, 9] . Our minimum sum is 1+3+5+7=16 and our maximum sum is 3+5+7+9=24. 
 * We would print
 
-* 16 24 
+* 16 24
+
+Sample Input
+
+1 2 3 4 5
+Sample Output
+
+10 14 
 */
 
 function miniMaxSum(arr) {
 
 
 }
+
+miniMaxSum([1, 2, 3, 4, 5]) // 10 14
+miniMaxSum([1, 3, 5, 7, 9]) // 16 24
