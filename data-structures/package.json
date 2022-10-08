@@ -19,6 +19,6 @@
     "codecov": "^3.0.0",
     "istanbul": "^v1.1.0-alpha.1",
     "mocha": "^5.0.4",
-    "mochawesome": "^3.0.2"
+    "mochawesome": "^7.1.3"
   }
 }
